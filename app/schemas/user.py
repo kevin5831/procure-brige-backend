@@ -3,12 +3,10 @@ from datetime import datetime
 from typing import List, Optional
 
 class PermissionSchema(BaseModel):
-    id: int
     name: str
     codename: str
 
 class UserSchema(BaseModel):
-    id: int
     first_name: Optional[str]
     last_name: Optional[str]
     email: EmailStr

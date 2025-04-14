@@ -1,5 +1,6 @@
 from tortoise.models import Model
 from tortoise import fields
+from tortoise.fields import JSONField
 import random
 from datetime import date
 
@@ -24,9 +25,12 @@ class Asset(Model):
     id = fields.IntField(pk=True)
     asset_id = fields.CharField(max_length=12, unique=True)
     company = fields.ForeignKeyField("models.Company", related_name="assets", on_delete=fields.CASCADE)
+    location = fields.ForeignKeyField("models.Location", related_name="assets", null=True, on_delete=fields.SET_NULL)
     name = fields.CharField(max_length=255)
     category = fields.CharField(max_length=50)
-    location = fields.ForeignKeyField("models.Location", related_name="assets", null=True, on_delete=fields.SET_NULL)
+    department = fields.CharField(max_length=100)
+    assigned = fields.CharField(max_length=100)
+    asset_details = JSONField(null=True)
     purchase_price = fields.DecimalField(max_digits=12, decimal_places=2)
     purchase_date = fields.DateField()
     status = fields.CharField(max_length=20, default=AssetStatus.IN_SERVICE)
@@ -109,3 +113,29 @@ class Maintenance(Model):
                 self.status = "incomplete"
 
         await super().save(*args, **kwargs)
+
+# ✅ AssetTransfer Model
+class AssetTransfer(Model):
+    id = fields.IntField(pk=True)
+    company = fields.ForeignKeyField("models.Company", related_name="asset_transfers", on_delete=fields.CASCADE)
+    asset = fields.ForeignKeyField("models.Asset", related_name="transfers")
+    from_location = fields.ForeignKeyField("models.Location", related_name="assets_from", null=True, on_delete=fields.SET_NULL)
+    from_department = fields.CharField(max_length=100)
+    from_assigned = fields.CharField(max_length=100)
+    to_location = fields.ForeignKeyField("models.Location", related_name="assets_to", null=True, on_delete=fields.SET_NULL)
+    to_department = fields.CharField(max_length=100)
+    to_assigned = fields.CharField(max_length=100)
+    transferred_by = fields.CharField(max_length=100)
+    transfer_date = fields.DateField()
+    note = fields.TextField(max_length=400)
+
+# ✅ AssetDisposal Model
+class AssetDisposal(Model):
+    id = fields.IntField(pk=True)
+    asset = fields.ForeignKeyField("models.Asset", related_name="disposals", on_delete=fields.CASCADE)
+    company = fields.ForeignKeyField("models.Company", related_name="disposals")
+    method = fields.CharField(max_length=50)  # sale, scrap, donation
+    disposal_date = fields.DateField()
+    value_received = fields.DecimalField(max_digits=10, decimal_places=2)
+    note = fields.TextField(null=True)
+    approved_by = fields.CharField(max_length=100)

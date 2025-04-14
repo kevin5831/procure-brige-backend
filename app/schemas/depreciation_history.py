@@ -3,7 +3,6 @@ from typing import Optional
 from datetime import date
 
 class DepreciationHistorySchema(BaseModel):
-    id: int
     asset_id: int
     depreciation: str
     update_date: date
