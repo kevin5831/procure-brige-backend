@@ -18,19 +18,16 @@ class Settings(BaseSettings):
         "localhost",
         "localhost:8080",
         "127.0.0.1",
-        "16.171.11.180",
-        "asseter.onrender.com",
-        "asserter.vercel.app",
+        "procure-brige.onrender.com"
+        "https://procure-brige.onrender.com"
     ]
     
     CORS_ORIGINS: list = [
         "http://127.0.0.1",
         "http://localhost",
-        "16.171.11.180",
         "http://localhost:3000",
         "http://localhost:8080",
-        "https://asseter.onrender.com",
-        "https://asserter.vercel.app",
+        "https://procure-brige.onrender.com"
     ]
     
     # Database Configuration (PostgreSQL)
