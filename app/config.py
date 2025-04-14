@@ -18,7 +18,7 @@ class Settings(BaseSettings):
         "localhost",
         "localhost:8080",
         "127.0.0.1",
-        "procure-brige.onrender.com"
+        "procure-brige.onrender.com",
         "https://procure-brige.onrender.com"
     ]
     
