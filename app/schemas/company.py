@@ -2,7 +2,7 @@ from pydantic import BaseModel, EmailStr
 from typing import Optional
 
 class CompanySchema(BaseModel):
-    id: int
+    id: Optional[int] = None
     name: str
     legal_name: Optional[str]
     tax_id: Optional[str]
@@ -15,7 +15,7 @@ class CompanySchema(BaseModel):
         from_attributes = True
 
 class LocationSchema(BaseModel):
-    id: int
+    id: Optional[int] = None
     company: int
     name: str
     code: str
@@ -28,7 +28,7 @@ class LocationSchema(BaseModel):
         from_attributes = True
 
 class DepartmentSchema(BaseModel):
-    id: int
+    id: Optional[int] = None
     company: int
     name: str
     description: str
@@ -38,7 +38,6 @@ class DepartmentSchema(BaseModel):
         from_attributes = True
 
 class InvitationSchema(BaseModel):
-    id: int
     invitation_id: str
     company: int
     name: str

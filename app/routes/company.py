@@ -8,6 +8,12 @@ router = APIRouter()
 # 🚀 List & Create Companies
 @router.get("/", response_model=list[CompanySchema])
 async def list_companies():
+    """
+    Get All Company List
+
+    URL : http://16.171.11.180/companies/
+
+    """ 
     return await Company.all()
 
 @router.post("/", response_model=CompanySchema)
@@ -39,10 +45,53 @@ async def delete_company(company_id: int):
     await company.delete()
     return {"message": "Company deleted successfully"}
 
+@router.post("/location", response_model=LocationSchema)
+async def create_location(location_data: LocationSchema):
+    company = await Company.get(id=location_data.company)
+    location = await Location.create(
+        company=company,
+        name=location_data.name,
+        code= location_data.code,
+        location_type=location_data.location_type,
+        country=location_data.country,
+        city=location_data.city,
+        address=location_data.address
+    )
+    return {
+        "company":company.id,
+        "name":location_data.name,
+        "code": location_data.code,
+        "location_type":location_data.location_type,
+        "country":location_data.country,
+        "city":location_data.city,
+        "address":location_data.address
+    }
+
 # 🚀 List Locations by Company
 @router.get("/{company_id}/locations", response_model=list[LocationSchema])
 async def list_locations(company_id: int):
-    return await Location.filter(company_id=company_id)
+    """
+    Get All Location List via company_id
+
+    URL : http://16.171.11.180/companies/{company_id}/locations
+
+    """ 
+    locations = await Location.filter(company_id=company_id)
+    
+    result = []
+    for location in locations:
+        result.append({
+            "id": location.id,
+            "company": location.company_id,  # Use company_id instead of company
+            "name": location.name,
+            "code": location.code,
+            "location_type": location.location_type,
+            "country": location.country,
+            "city": location.city,
+            "address": location.address
+        })
+    
+    return result
 
 # 🚀 List Departments by Company
 @router.get("/{company_id}/departments", response_model=list[DepartmentSchema])
